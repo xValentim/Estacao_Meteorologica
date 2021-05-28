@@ -42,7 +42,7 @@ return volts;}
 
 void loop()
 {
-  celsius = 99.7686531987836*sensor_volts()-0.0142671384724442;
+  celsius = 99.6257186938304*sensor_volts()+0.0575423468978631;
   
   Serial.print(celsius);
   Serial.print(" c, ");
