@@ -28,8 +28,8 @@ float vcc_3p3v = 3.3;
 float R = 200000.0; // ohms
 float a_dht22_T = 1;
 float b_dht22_T = 0;
-float a_dht22_H = 1;
-float b_dht22_H = 0;
+float a_dht22_H = 1.054;
+float b_dht22_H = -1.6488;
 float a_lm35;
 float b_lm35;
 
