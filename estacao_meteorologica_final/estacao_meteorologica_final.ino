@@ -28,10 +28,10 @@ float vcc_3p3v = 3.3;
 float R = 200000.0; // ohms
 float a_dht22_T = 1;
 float b_dht22_T = 0;
-float a_dht22_H = 1.050;
-float b_dht22_H = -2.9197;
-float a_lm35;
-float b_lm35;
+float a_dht22_H = 1.04794443319778;
+float b_dht22_H = -3.04147945002078;
+float a_lm35 = 99.6257186938304/100;
+float b_lm35 = 0.0575423468978631;
 
 
 
@@ -54,7 +54,7 @@ void setup()
 }
 void loop()
 {
-  //float temperatura_sem_calibragem = get_temperatura_lm35(tensao_na_porta(lm35));
+  float temperatura_sem_calibragem = get_temperatura_lm35(tensao_na_porta(lm35));
   float sensorValue = analogRead(1);
   float v_out_ldr = (sensorValue / 1023) * 1.1;
   float R_ldr = (v_out_ldr * R) / (vcc_3p3v - v_out_ldr);
@@ -62,14 +62,16 @@ void loop()
   
   float humidade = calibragem_dht22(dht.readHumidity(), a_dht22_H, b_dht22_H);
   float temperatura_dht22 = calibragem_dht22(dht.readTemperature(), a_dht22_T, b_dht22_T);
-  //float temperatura = calibragem_lm35(temperatura_sem_calibragem, a_lm35, b_lm35);
+  float temperatura = calibragem_lm35(temperatura_sem_calibragem, a_lm35, b_lm35);
   float luminosidade = converte_luminosidade(R_ldr);
   
   Serial.print("Umidade: "); //IMPRIME O TEXTO NA SERIAL
   Serial.print(humidade); //IMPRIME NA SERIAL O VALOR DE UMIDADE MEDIDO
   Serial.print(" %"); //IMPRIME O TEXTO NA SERIAL 
   Serial.print(" / Temperatura: "); //IMPRIME O TEXTO NA SERIAL
-  Serial.print(temperatura_dht22); //IMPRIME NA SERIAL O VALOR DE UMIDADE MEDIDO E REMOVE A PARTE DECIMAL
+  Serial.print(temperatura); //IMPRIME NA SERIAL O VALOR DE UMIDADE MEDIDO E REMOVE A PARTE DECIMAL
+  Serial.print(' ');
+  Serial.print(temperatura_dht22);
   Serial.print("*C"); //IMPRIME O TEXTO NA SERIAL
   Serial.print(" / Luminosidade: "); //IMPRIME O TEXTO NA SERIAL
   Serial.print(luminosidade); //IMPRIME NA SERIAL O VALOR DE UMIDADE MEDIDO E REMOVE A PARTE DECIMAL
@@ -78,7 +80,7 @@ void loop()
   lcd.setCursor(0,1);
   lcd.print("Temp.:");
   lcd.setCursor (7, 1);
-  lcd.print(temperatura_dht22);
+  lcd.print(temperatura);
   lcd.setCursor (13, 1);
   lcd.write(byte(0));
   lcd.setCursor (14, 1);
